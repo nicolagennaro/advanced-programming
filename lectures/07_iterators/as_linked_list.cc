@@ -1,7 +1,11 @@
 #include <iostream>
 #include <memory>
 
+
+
 enum class IM { push_back, push_front };
+
+
 
 template <typename T>
 class List {
@@ -30,6 +34,8 @@ class List {
   }
   std::function<void(T&)> custom_function;
 
+
+  // the definition of the class is outside the class List
   class Iterator;
   Iterator begin() { return Iterator{head.get()}; }
   Iterator end() { return Iterator{nullptr}; }
@@ -39,6 +45,9 @@ class List {
   ConstIterator end() const { return ConstIterator{nullptr}; }
 };
 
+
+
+// definition of class Iterator
 template <typename T>
 class List<T>::Iterator {
   using Node = List<T>::Node;
@@ -67,6 +76,9 @@ class List<T>::Iterator {
   bool operator!=(const Iterator& other) { return !(*this == other); }
 };
 
+
+
+// definition of class ConstIterator
 template <typename T>
 class List<T>::ConstIterator : public List<T>::Iterator {
   using parent = List<T>::Iterator;
@@ -76,6 +88,9 @@ class List<T>::ConstIterator : public List<T>::Iterator {
   const T& operator*() const { return parent::operator*(); }
 };
 
+
+
+// definition of function insert
 template <typename T>
 void List<T>::insert(const T& v, const IM method) {
   if (head.get() == nullptr)
@@ -98,11 +113,15 @@ void List<T>::insert(const T& v, const IM method) {
   }
 }
 
+
+// push front
 template <typename T>
 void List<T>::push_front(const T& v) {
   head.reset(new Node{v, head.release()});
 }
 
+
+// push back
 template <typename T>
 void List<T>::push_back(const T& v) {
   Node* tmp{head.get()};
@@ -111,6 +130,10 @@ void List<T>::push_back(const T& v) {
   tmp->next.reset(new Node{v});
 }
 
+
+
+
+// print List
 template <typename T>
 void List<T>::print() const {
   // Node* tmp { head.get() };
@@ -127,6 +150,10 @@ void List<T>::print() const {
   for (; it != it_end; ++it)
     std::cout << *it << std::endl;
 }
+
+
+
+
 
 int main() {
   List<double> list{};
